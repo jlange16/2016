@@ -25,13 +25,16 @@ class Joystick;
 
 class UserController {
 private:
-	std::shared_ptr<Joystick> p_joystick;
+	std::unique_ptr<Joystick> p_joystick;
 public:
 	UserController(int port);
-	double getLeftXAxis();
-	double getLeftYAxis();
-	double getRightXAxis();
-	double getRightYAxis();
+	~UserController();
+	double getLeftXAxis() const;
+	double getLeftYAxis() const;
+	double getRightXAxis() const;
+	double getRightYAxis() const;
+	double getJoystickYAxis() const;
+	Joystick* getRawJoystick() const;
 
 };
 

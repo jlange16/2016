@@ -14,19 +14,25 @@
 class UserController;
 class DriveBase;
 
+enum class DriveType
+{
+	TANK
+};
+
 class TeleopDriveTrainController {
 private:
-	std::shared_ptr<UserController> p_user_controller;
-	std::shared_ptr<DriveBase> p_drive_base;
+	UserController* p_user_controller;
+	DriveBase* p_drive_base;
 	DriveType current_type;
 
 	void setStraight(double speed);
 	void turnInPlace(double speed);
-	void setTurn(double l_speed, double r_speed);
-	double findWheelSpeeds(double throttle, double turn);
+	void setTurn(double throttle, double turn);
+	double findThrottle(double throttle);
 
 public:
 	TeleopDriveTrainController(UserController* const controller, DriveBase* const drivebase, DriveType drivetype);
+	~TeleopDriveTrainController();
 	void update();
 };
 

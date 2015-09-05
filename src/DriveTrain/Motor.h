@@ -14,10 +14,12 @@ class TalonSRX;
 
 class Motor {
 private:
-	std::shared_ptr<TalonSRX> talon;
+	std::unique_ptr<TalonSRX> talon;
 public:
 	Motor(int channel);
+	~Motor();
 	void setSpeed(float speed);
+	void disable();
 };
 
 #endif /* MOTOR_H_ */

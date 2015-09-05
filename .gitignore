@@ -1,5 +1,8 @@
 Debug/
 
+# That stupid, useless file
+.DS_Store
+
 # Compiled Object files
 *.slo
 *.lo

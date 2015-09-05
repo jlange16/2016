@@ -8,35 +8,67 @@
 #ifndef DRIVEBASE_H_
 #define DRIVEBASE_H_
 
+#include "DriveTrain/Motor.h"
+
 #include <memory>
 #include <map>
+#include <stdexcept>
+#include <cassert>
 
-enum DriveType
+enum WheelTypes
 {
-	TANK,
-	MECANUM,
-	SLIDE
+	RIGHT_FOR,
+	RIGHT_BCK,
+	LEFT_FOR,
+	LEFT_BCK,
+	OTHER
 };
 
 enum Side
 {
 	RIGHT,
-	LEFT
+	LEFT,
+	NONE
 };
-
-class Motor;
 
 class DriveBase {
 private:
-	DriveBase(int motor_a, int motor_b, int motor_c, int motor_d);
-	std::map<int, std::shared_ptr<Motor> > all_motors;
-	std::map<std::shared_ptr<Motor>, Side> motors_side;
+	std::map<int, std::unique_ptr<Motor> > all_motors;
+
+	void addMotor()
+	{
+	}
+
+	template<typename... T>
+	void addMotor(T... types)
+	{
+		throw std::runtime_error("MISSING PORT OR TYPE");
+	};
+
+	template<typename... T>
+	void addMotor(int port, WheelTypes wt, T... types)
+	{
+		all_motors[wt] = std::make_unique<Motor>(port);
+	};
+	template<typename... T>
+	DriveBase(T... types)
+	{
+
+	};
 
 public:
-	static DriveBase& getInstance(int motor_a = -1, int motor_b = -1, int motor_c = -1, int motor_d = -1);
+	template<typename... T>
+	static DriveBase& getInstance(T... types)
+	{
+		static DriveBase* db = new DriveBase(types...);
+		assert(db);
+		return *db;
+	};
+	~DriveBase();
+	void kill();
 	void setAll(double speed);
 	void setIndividual(int port, double speed);
-	void setDouble(Side side, double speed);
+	void setSide(Side side, double speed);
 };
 
 #endif /* DRIVEBASE_H_ */

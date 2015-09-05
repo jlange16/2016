@@ -10,10 +10,17 @@
 
 Motor::Motor(int channel) {
 	// TODO Auto-generated constructor stub
-	talon.reset(new TalonSRX(channel) );
+	talon = std::make_unique<TalonSRX>(channel);
 }
+
+Motor::~Motor() = default;
 
 void Motor::setSpeed(float speed)
 {
 	talon->Set(speed);
+}
+
+void Motor::disable()
+{
+	talon->Disable();
 }
