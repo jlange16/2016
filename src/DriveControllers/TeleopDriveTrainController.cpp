@@ -13,8 +13,6 @@
 #include <ctime>
 #include <cmath>
 
-const double MAX_THROTTLE = 0.5;
-
 TeleopDriveTrainController::TeleopDriveTrainController(UserController* controller, DriveBase* drivebase, DriveType drivetype) :
 		p_user_controller(controller), p_drive_base(drivebase), current_type(drivetype)
 {

@@ -58,11 +58,11 @@ private:
 
 public:
 	template<typename... T>
-	static DriveBase& getInstance(T... types)
+	static DriveBase* getInstance(T... types)
 	{
 		static DriveBase* db = new DriveBase(types...);
 		assert(db);
-		return *db;
+		return db;
 	};
 	~DriveBase();
 	void kill();

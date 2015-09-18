@@ -25,17 +25,18 @@ enum class SWITCHPOS;
 class Forklift : public Fork, public Elevator
 {
 private:
+	Forklift() = delete;
 public:
 
 	Forklift(int porta, PORT_TYPES PTa, int portb, PORT_TYPES PTb, int channela, SWITCHPOS posa, int channelb, SWITCHPOS posb);
 	~Forklift();
 
 	template<class... T>
-	static Forklift& getInstance(T... types)
+	static Forklift* getInstance(T... types)
 	{
 		static Forklift* fl = new Forklift(types...);
 		assert(fl);
-		return *fl;
+		return fl;
 	};
 };
 

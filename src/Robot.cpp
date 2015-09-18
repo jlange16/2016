@@ -18,6 +18,11 @@ private:
 	LiveWindow *lw;
 
 
+	//robo parts
+	DriveBase* db;
+	Forklift* fl;
+
+
 	//user controls
 	std::unique_ptr<UserController> F310;
 	std::unique_ptr<UserController> JStick;
@@ -36,7 +41,7 @@ private:
 		//takes in motor ports
 		//may need to be changed later
 		//for now, values placeholder
-		DriveBase::getInstance(
+		db = DriveBase::getInstance(
 				0, RIGHT_FOR,
 				1, RIGHT_BCK,
 				2, LEFT_FOR,
@@ -44,7 +49,7 @@ private:
 
 		//takes in motor type and ports
 		//place holders for now
-		Forklift::getInstance(
+		fl = Forklift::getInstance(
 				4, PORT_TYPES::MOTOR,
 				1, PORT_TYPES::SOLENOID,
 				4, SWITCHPOS::TOP,
@@ -68,8 +73,8 @@ private:
 	void TeleopInit()
 	{
 
-		TDTC = std::make_unique<TeleopDriveTrainController>(F310.get(), &DriveBase::getInstance(), DriveType::TANK);
-		TFC = std::make_unique<TeleopForkliftController>(Forklift::getInstance(), JStick.get() );
+		TDTC = std::make_unique<TeleopDriveTrainController>(F310.get(), db, DriveType::TANK);
+		TFC = std::make_unique<TeleopForkliftController>(fl, JStick.get() );
 	}
 
 	void TeleopPeriodic()
@@ -86,12 +91,15 @@ private:
 		catch(std::runtime_error& e)
 		{
 			//sets speed to 0
-			DriveBase::getInstance().setAll(0.0);
-			Forklift::getInstance().setEleSpeed(0.0);
+			db->setAll(0.0);
+			fl->setEleSpeed(0.0);
 
 			//kills motors
-			DriveBase::getInstance().kill();
-			Forklift::getInstance().kill();
+			db->kill();
+			fl->kill();
+
+			//throws exception
+			throw e;
 		}
 	}
 
