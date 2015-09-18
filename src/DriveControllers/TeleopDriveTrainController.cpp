@@ -12,6 +12,7 @@
 
 #include <ctime>
 #include <cmath>
+#include <iostream>
 
 TeleopDriveTrainController::TeleopDriveTrainController(UserController* controller, DriveBase* drivebase, DriveType drivetype) :
 		p_user_controller(controller), p_drive_base(drivebase), current_type(drivetype)
@@ -24,6 +25,9 @@ void TeleopDriveTrainController::update()
 {
 	double controller_turn = p_user_controller->getRightXAxis();
 	double controller_throttle = p_user_controller->getLeftYAxis();
+
+	std::cout << controller_turn << std::endl;
+	std::cout << controller_throttle << std::endl;
 
 	double throttle = findThrottle(controller_throttle * Configs::THROTTLE_MULTIPLIER);
 	double turn = findThrottle(controller_turn * Configs::THROTTLE_MULTIPLIER);

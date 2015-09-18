@@ -16,6 +16,7 @@ namespace Configs
 	extern const double MAX_TURN_RADIUS;
 	extern const double ROBOT_WIDTH;
 	extern const double DRIVE_CONTROLLER_PORT;
+	extern const double ELEVATOR_CONTROLLER_PORT;
 	extern const double ELEVATOR_MULTIPLIER;
 	extern const int FORK_TOGGLE_BIND;
 	extern const int SWITCH_SENSITIVITY;

@@ -42,10 +42,10 @@ private:
 		//may need to be changed later
 		//for now, values placeholder
 		db = DriveBase::getInstance(
-				0, RIGHT_FOR,
-				1, RIGHT_BCK,
-				2, LEFT_FOR,
-				3, LEFT_BCK);
+				0, LEFT_FOR,
+				1, LEFT_BCK,
+				2, RIGHT_FOR,
+				3, RIGHT_BCK);
 
 		//takes in motor type and ports
 		//place holders for now
@@ -57,6 +57,10 @@ private:
 
 
 		F310 = std::make_unique<UserController>(Configs::DRIVE_CONTROLLER_PORT);
+		JStick = std::make_unique<UserController>(Configs::ELEVATOR_CONTROLLER_PORT);
+
+		assert(F310.get() );
+		assert(JStick.get() );
 
 	}
 

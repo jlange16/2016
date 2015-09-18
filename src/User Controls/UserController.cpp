@@ -8,6 +8,9 @@
 #include <User Controls/UserController.h>
 
 #include <Joystick.h>
+#include <Configs/Configs.h>
+
+#include <cmath>
 
 UserController::UserController(int port)
 {
@@ -31,11 +34,19 @@ double UserController::getLeftYAxis() const
 
 double UserController::getRightXAxis() const
 {
+	if(abs(p_joystick->GetRawAxis(F310_AXIS::RIGHT_X_AXIS) ) < Configs::ZERO_THROTTLE_THRESHOLD)
+	{
+		return 0.0;
+	}
 	return p_joystick->GetRawAxis(F310_AXIS::RIGHT_X_AXIS);
 }
 
 double UserController::getRightYAxis() const
 {
+	if(abs(p_joystick->GetRawAxis(F310_AXIS::RIGHT_Y_AXIS) ) < Configs::ZERO_THROTTLE_THRESHOLD)
+	{
+		return 0.0;
+	}
 	return p_joystick->GetRawAxis(F310_AXIS::RIGHT_Y_AXIS);
 }
 

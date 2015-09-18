@@ -14,6 +14,7 @@
 #include <map>
 #include <stdexcept>
 #include <cassert>
+#include <iostream>
 
 enum WheelTypes
 {
@@ -48,12 +49,14 @@ private:
 	template<typename... T>
 	void addMotor(int port, WheelTypes wt, T... types)
 	{
+		std::cout << "Added motor" << wt << "@ port" << port << std::endl;
 		all_motors[wt] = std::make_unique<Motor>(port);
+		addMotor(types...);
 	};
 	template<typename... T>
 	DriveBase(T... types)
 	{
-
+		addMotor(types...);
 	};
 
 public:
