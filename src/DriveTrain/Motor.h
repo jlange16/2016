@@ -9,12 +9,23 @@
 #define MOTOR_H_
 
 #include <memory>
+#include <vector>
+
+#include <stdexcept>
+#include <string>
 
 class TalonSRX;
+
+class PortExists : public std::runtime_error
+{
+public:
+	PortExists(int channel) : std::runtime_error("Port " + std::to_string(channel) + "exists already!"){};
+};
 
 class Motor {
 private:
 	std::unique_ptr<TalonSRX> talon;
+	static std::vector<int> all_ports;
 public:
 	Motor(int channel);
 	~Motor();

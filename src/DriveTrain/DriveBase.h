@@ -22,7 +22,7 @@ enum WheelTypes
 	RIGHT_BCK,
 	LEFT_FOR,
 	LEFT_BCK,
-	OTHER
+	WHEEL_TYPES_MAX
 };
 
 enum Side

@@ -8,9 +8,18 @@
 #include <DriveTrain/Motor.h>
 #include <TalonSRX.h>
 
+#include <algorithm>
+
+std::vector<int> Motor::all_ports;
+
 Motor::Motor(int channel) {
-	// TODO Auto-generated constructor stub
+	if(std::find(all_ports.begin(), all_ports.end(), channel) != all_ports.end() )
+	{
+		throw PortExists(channel);
+	}
+
 	talon = std::make_unique<TalonSRX>(channel);
+	all_ports.push_back(channel);
 }
 
 Motor::~Motor() = default;

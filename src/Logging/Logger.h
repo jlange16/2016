@@ -15,8 +15,8 @@ class Logger
 {
 private:
 	static std::vector<std::string> queue;
-	static void clearLine();
 public:
+	Logger();
 	static void addToQueue(std::string add);
 	static void updateLogs();
 };

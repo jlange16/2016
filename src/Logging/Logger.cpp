@@ -8,42 +8,35 @@
 #include <Logging/Logger.h>
 
 #include <iostream>
+#include <fstream>
 
-const int CHAR_CLEAR = 500;
+const std::string LOG_PATH = "/home/lvuser/logs/log.txt";
 
 std::vector<std::string> Logger::queue;
+
+std::ofstream file;
+
+Logger::Logger()
+{
+	//appends instead of overwrites
+	std::cout << "Since we don't have boost, we cannot create directories!"
+			"Make sure a directory doesn't need to be made @ "
+			<< LOG_PATH << std::endl;
+
+	file.open(LOG_PATH, std::ios_base::app);
+}
 
 void Logger::addToQueue(std::string add)
 {
 	Logger::queue.push_back(add);
 }
 
-void Logger::clearLine()
-{
-	//goes up a line
-	std::cout << "\x1b[A";
-
-	//goes to beginning of line
-	std::cout << "/r";
-
-	//clears it
-	for(int i = 0; i <= CHAR_CLEAR; i++)
-	{
-		std::cout << " ";
-	}
-}
-
 void Logger::updateLogs()
 {
-	for(int i = 0; i <= Logger::queue.size(); i++)
-	{
-		Logger::clearLine();
-	}
-
 	//prints queue
 	for(auto& it : Logger::queue)
 	{
-		std::cout << it << std::endl;
+		file << it << std::endl;
 	}
 
 	//clears queue

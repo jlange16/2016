@@ -12,6 +12,12 @@
 
 #include <stdexcept>
 
+class KillRobot : public std::runtime_error
+{
+public:
+	KillRobot() : std::runtime_error("ROBOT HAS BEEN ABORTED"){};
+};
+
 class Robot: public IterativeRobot
 {
 private:
@@ -87,12 +93,12 @@ private:
 		{
 			if(F310->getRawJoystick()->GetRawButton(Configs::PANIC_BIND) )
 			{
-				throw std::runtime_error("PANIC! ABORT ABORT ABORT");
+				throw KillRobot();
 			}
 			TDTC->update();
 			TFC->update();
 		}
-		catch(std::runtime_error& e)
+		catch(KillRobot& e)
 		{
 			//sets speed to 0
 			db->setAll(0.0);

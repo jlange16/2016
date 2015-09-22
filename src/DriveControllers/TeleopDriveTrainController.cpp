@@ -9,6 +9,7 @@
 
 #include "User Controls/UserController.h"
 #include "Configs/Configs.h"
+#include "Logging/Logger.h"
 
 #include <ctime>
 #include <cmath>
@@ -29,6 +30,7 @@ void TeleopDriveTrainController::update()
 	std::cout << controller_turn << std::endl;
 	std::cout << controller_throttle << std::endl;
 
+	//is l side?
 	double throttle = findThrottle(controller_throttle * Configs::THROTTLE_MULTIPLIER);
 	double turn = findThrottle(controller_turn * Configs::THROTTLE_MULTIPLIER);
 
@@ -49,6 +51,19 @@ void TeleopDriveTrainController::update()
 		const double STOP = 0.0;
 		setStraight(STOP);
 	}
+
+	auto getTime = []()
+		{
+		time_t t;
+		struct tm * timeinfo;
+		time(&t);
+		timeinfo = localtime(&t);
+		return timeinfo;
+		};
+
+	Logger::addToQueue(asctime(getTime() ) );
+	Logger::addToQueue("Left Side: " + std::to_string(throttle) );
+	Logger::addToQueue("Right Side: " + std::to_string(turn) );
 }
 
 void TeleopDriveTrainController::setStraight(double speed)
