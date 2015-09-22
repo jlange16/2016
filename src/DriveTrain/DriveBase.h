@@ -50,7 +50,7 @@ private:
 	void addMotor(int port, WheelTypes wt, T... types)
 	{
 		std::cout << "Added motor" << wt << "@ port" << port << std::endl;
-		all_motors[wt] = std::make_unique<Motor>(port);
+		all_motors.emplace(wt, std::make_unique<Motor>(port) );
 		addMotor(types...);
 	};
 	template<typename... T>

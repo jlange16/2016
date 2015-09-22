@@ -18,6 +18,10 @@ private:
 public:
 	Motor(int channel);
 	~Motor();
+	Motor(Motor& m) = delete;
+	Motor& operator=(Motor& m) = delete;
+	Motor(Motor&&m) = delete;
+	Motor& operator=(Motor&& m) = delete;
 	void setSpeed(float speed);
 	void disable();
 };

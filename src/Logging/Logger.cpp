@@ -18,27 +18,32 @@ void Logger::addToQueue(std::string add)
 	Logger::queue.push_back(add);
 }
 
-void Logger::print(std::string str)
+void Logger::clearLine()
 {
-	//moves to beginning of line
+	//goes up a line
+	std::cout << "\x1b[A";
+
+	//goes to beginning of line
 	std::cout << "/r";
 
-	//clears line
+	//clears it
 	for(int i = 0; i <= CHAR_CLEAR; i++)
 	{
 		std::cout << " ";
 	}
-
-	//prints input string
-	std::cout << str << std::endl;
 }
 
 void Logger::updateLogs()
 {
+	for(int i = 0; i <= Logger::queue.size(); i++)
+	{
+		Logger::clearLine();
+	}
+
 	//prints queue
 	for(auto& it : Logger::queue)
 	{
-		print(it);
+		std::cout << it << std::endl;
 	}
 
 	//clears queue
