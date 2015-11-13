@@ -11,21 +11,6 @@
 
 DriveBase::~DriveBase() = default;
 
-bool whlTypSdCmprsn(WheelTypes wt, Side sd)
-{
-	if((wt == RIGHT_FOR || wt == RIGHT_BCK) && sd == RIGHT)
-	{
-		return true;
-	}
-
-	if((wt == LEFT_FOR || wt == LEFT_BCK) && sd == LEFT)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 void DriveBase::setAll(double speed)
 {
 	for (auto& it: all_motors)
@@ -43,12 +28,7 @@ void DriveBase::setSide(Side side, double speed)
 {
 	for(auto& it : all_motors)
 	{
-		if(it.first >= WHEEL_TYPES_MAX)
-		{
-			continue;
-		}
-
-		if(whlTypSdCmprsn(static_cast<WheelTypes>(it.first), side) )
+		if(it.first == side)
 		{
 			it.second->setSpeed(speed);
 		}

@@ -16,15 +16,6 @@
 #include <cassert>
 #include <iostream>
 
-enum WheelTypes
-{
-	RIGHT_FOR,
-	RIGHT_BCK,
-	LEFT_FOR,
-	LEFT_BCK,
-	WHEEL_TYPES_MAX
-};
-
 enum Side
 {
 	RIGHT,
@@ -36,22 +27,25 @@ class DriveBase {
 private:
 	std::map<int, std::unique_ptr<Motor> > all_motors;
 
-	void addMotor()
+	DriveBase& addMotor()
 	{
+		return *this;
 	}
 
 	template<typename... T>
-	void addMotor(T... types)
+	DriveBase& addMotor(T... types)
 	{
 		throw std::runtime_error("MISSING PORT OR TYPE");
 	};
 
 	template<typename... T>
-	void addMotor(int port, WheelTypes wt, T... types)
+	DriveBase& addMotor(int port, Side wt, T... types)
 	{
 		std::cout << "Added motor" << wt << "@ port" << port << std::endl;
 		all_motors.emplace(wt, std::make_unique<Motor>(port) );
 		addMotor(types...);
+
+		return *this;
 	};
 	template<typename... T>
 	DriveBase(T... types)

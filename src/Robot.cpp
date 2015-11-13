@@ -5,8 +5,6 @@
 #include "User Controls/UserController.h"
 #include "DriveTrain/DriveBase.h"
 #include "Configs/Configs.h"
-#include "Forklift/TeleopForkliftController.h"
-#include "Forklift/Forklift.h"
 
 #include <Joystick.h>
 
@@ -26,17 +24,13 @@ private:
 
 	//robo parts
 	DriveBase* db;
-	Forklift* fl;
 
 
 	//user controls
 	std::unique_ptr<UserController> F310;
-	std::unique_ptr<UserController> JStick;
 
 	//teleop controllers
 	std::unique_ptr<TeleopDriveTrainController> TDTC;
-	//not team fortress classic!
-	std::unique_ptr<TeleopForkliftController> TFC;
 
 	void RobotInit()
 	{
@@ -48,25 +42,21 @@ private:
 		//may need to be changed later
 		//for now, values placeholder
 		db = DriveBase::getInstance(
-				0, LEFT_FOR,
-				1, LEFT_BCK,
-				2, RIGHT_FOR,
-				3, RIGHT_BCK);
+				0, LEFT,
+				1, LEFT,
+				2, LEFT,
+				3, RIGHT,
+				4, RIGHT,
+				5, RIGHT);
 
-		//takes in motor type and ports
-		//place holders for now
-		fl = Forklift::getInstance(
-				4, PORT_TYPES::MOTOR,
-				1, PORT_TYPES::SOLENOID,
-				4, SWITCHPOS::TOP,
-				5, SWITCHPOS::BOTTOM);
-
+		/*
+		 * 0-2 LEFT
+		 * 3-5 RIGHT
+		 */
 
 		F310 = std::make_unique<UserController>(Configs::DRIVE_CONTROLLER_PORT);
-		JStick = std::make_unique<UserController>(Configs::ELEVATOR_CONTROLLER_PORT);
 
 		assert(F310.get() );
-		assert(JStick.get() );
 
 	}
 
@@ -84,7 +74,6 @@ private:
 	{
 
 		TDTC = std::make_unique<TeleopDriveTrainController>(F310.get(), db, DriveType::TANK);
-		TFC = std::make_unique<TeleopForkliftController>(fl, JStick.get() );
 	}
 
 	void TeleopPeriodic()
@@ -96,17 +85,14 @@ private:
 				throw KillRobot();
 			}
 			TDTC->update();
-			TFC->update();
 		}
 		catch(KillRobot& e)
 		{
 			//sets speed to 0
 			db->setAll(0.0);
-			fl->setEleSpeed(0.0);
 
 			//kills motors
 			db->kill();
-			fl->kill();
 
 			//throws exception
 			throw e;
