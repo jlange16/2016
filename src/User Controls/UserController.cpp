@@ -29,6 +29,10 @@ double UserController::getLeftXAxis() const
 
 double UserController::getLeftYAxis() const
 {
+	if(abs(p_joystick->GetRawAxis(F310_AXIS::LEFT_Y_AXIS) ) < Configs::ZERO_THROTTLE_THRESHOLD)
+		{
+			return 0.0;
+		}
 	return p_joystick->GetRawAxis(F310_AXIS::LEFT_Y_AXIS);
 }
 

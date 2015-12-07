@@ -24,15 +24,15 @@ TeleopDriveTrainController::~TeleopDriveTrainController() = default;
 
 void TeleopDriveTrainController::update()
 {
-	double controller_turn = p_user_controller->getRightXAxis();
-	double controller_throttle = p_user_controller->getLeftYAxis();
+	double controller_turn = p_user_controller->getLeftXAxis();
+	double controller_throttle = p_user_controller->getRightYAxis();
 
 	std::cout << controller_turn << std::endl;
 	std::cout << controller_throttle << std::endl;
 
 	//is l side?
 	double throttle = findThrottle(controller_throttle * Configs::THROTTLE_MULTIPLIER);
-	double turn = findThrottle(controller_turn * Configs::THROTTLE_MULTIPLIER);
+	double turn = findTurn(controller_turn * Configs::THROTTLE_MULTIPLIER);
 
 	if(throttle != 0 && turn != 0)
 	{
@@ -109,8 +109,8 @@ double TeleopDriveTrainController::findThrottle(double throttle)
 	static float prev_throttle = 0.0f;
 
 	//clock returns clock ticks since epoch
-	static float prev_time = clock();
-	float current_time = clock();
+	static float prev_time = clock() / (double)CLOCKS_PER_SEC;
+	float current_time = clock() / (double)CLOCKS_PER_SEC;
 
 	if(Configs::ACCEL_TIME != 0)
 	{
@@ -129,4 +129,34 @@ double TeleopDriveTrainController::findThrottle(double throttle)
 	prev_throttle = throttle;
 
 	return (abs(throttle) < Configs::ZERO_THROTTLE_THRESHOLD) ? 0.0 : throttle;
+}
+
+double TeleopDriveTrainController::findTurn(double throttle)
+{
+	//I <3 WET Programming!
+
+	//stores last throttle!
+		static float prev_throttle = 0.0f;
+
+		//clock returns clock ticks since epoch
+		static float prev_time = clock() / (double)CLOCKS_PER_SEC;
+		float current_time = clock() / (double)CLOCKS_PER_SEC;
+
+		if(Configs::ACCEL_TIME != 0)
+		{
+			double accel = (throttle - prev_throttle) / Configs::ACCEL_TIME;
+			float delta_time = current_time - prev_time;
+
+			double delta_throttle = delta_time * accel;
+
+			throttle = prev_throttle + delta_throttle;
+		}
+
+		//sets prev time to current one
+		prev_time = current_time;
+
+		//sets prev throttle to current one
+		prev_throttle = throttle;
+
+		return (abs(throttle) < Configs::ZERO_THROTTLE_THRESHOLD) ? 0.0 : throttle;
 }

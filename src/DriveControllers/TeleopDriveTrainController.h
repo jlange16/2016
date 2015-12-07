@@ -29,6 +29,7 @@ private:
 	void turnInPlace(double speed);
 	void setTurn(double throttle, double turn);
 	double findThrottle(double throttle);
+	double findTurn(double throttle);
 
 public:
 	TeleopDriveTrainController(UserController* const controller, DriveBase* const drivebase, DriveType drivetype);
