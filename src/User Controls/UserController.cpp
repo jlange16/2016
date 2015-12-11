@@ -17,9 +17,7 @@ UserController::UserController(int port)
 	p_joystick = std::make_unique<Joystick>(port);
 }
 
-UserController::~UserController()
-{
-}
+UserController::~UserController() = default;
 
 double UserController::getLeftXAxis() const
 {
@@ -29,28 +27,16 @@ double UserController::getLeftXAxis() const
 
 double UserController::getLeftYAxis() const
 {
-	if(abs(p_joystick->GetRawAxis(F310_AXIS::LEFT_Y_AXIS) ) < Configs::ZERO_THROTTLE_THRESHOLD)
-		{
-			return 0.0;
-		}
 	return p_joystick->GetRawAxis(F310_AXIS::LEFT_Y_AXIS);
 }
 
 double UserController::getRightXAxis() const
 {
-	if(abs(p_joystick->GetRawAxis(F310_AXIS::RIGHT_X_AXIS) ) < Configs::ZERO_THROTTLE_THRESHOLD)
-	{
-		return 0.0;
-	}
 	return p_joystick->GetRawAxis(F310_AXIS::RIGHT_X_AXIS);
 }
 
 double UserController::getRightYAxis() const
 {
-	if(abs(p_joystick->GetRawAxis(F310_AXIS::RIGHT_Y_AXIS) ) < Configs::ZERO_THROTTLE_THRESHOLD)
-	{
-		return 0.0;
-	}
 	return p_joystick->GetRawAxis(F310_AXIS::RIGHT_Y_AXIS);
 }
 

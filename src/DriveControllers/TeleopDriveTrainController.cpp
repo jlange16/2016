@@ -14,6 +14,43 @@
 #include <ctime>
 #include <cmath>
 #include <iostream>
+#include <cassert>
+
+namespace
+{
+	class FindThrottle
+	{
+	private:
+		float _prev_throttle = clock() / (double)CLOCKS_PER_SEC;
+		float _prev_time;
+	public:
+		double findThrottle(double throttle)
+		{
+			//stores last throttle!
+
+			//clock returns clock ticks since epoch
+			float current_time = clock() / (double)CLOCKS_PER_SEC;
+
+			if(Configs::ACCEL_TIME != 0)
+			{
+				double accel = (throttle - _prev_throttle) / Configs::ACCEL_TIME;
+				float delta_time = current_time - _prev_time;
+
+				double delta_throttle = delta_time * accel;
+
+				throttle = _prev_throttle + delta_throttle;
+			}
+
+			//sets prev time to current one
+			_prev_time = current_time;
+
+			//sets prev throttle to current one
+			_prev_throttle = throttle;
+
+			return (abs(throttle) < Configs::ZERO_THROTTLE_THRESHOLD) ? 0.0 : throttle;
+		}
+	};
+}
 
 TeleopDriveTrainController::TeleopDriveTrainController(UserController* controller, DriveBase* drivebase, DriveType drivetype) :
 		p_user_controller(controller), p_drive_base(drivebase), current_type(drivetype)
@@ -27,12 +64,30 @@ void TeleopDriveTrainController::update()
 	double controller_turn = p_user_controller->getLeftXAxis();
 	double controller_throttle = p_user_controller->getRightYAxis();
 
+
+	//moved it out of joystick into here
+	if(controller_turn <= Configs::ZERO_THROTTLE_THRESHOLD)
+	{
+		controller_turn = 0;
+	}
+
+	if(controller_throttle <= Configs::ZERO_THROTTLE_THRESHOLD)
+	{
+		controller_throttle = 0;
+	}
+
 	std::cout << controller_turn << std::endl;
 	std::cout << controller_throttle << std::endl;
 
+	static FindThrottle ft_turn{};
+	static FindThrottle ft_throt{};
+
 	//is l side?
-	double throttle = findThrottle(controller_throttle * Configs::THROTTLE_MULTIPLIER);
-	double turn = findTurn(controller_turn * Configs::THROTTLE_MULTIPLIER);
+	double throttle = ft_throt.findThrottle(controller_throttle * Configs::THROTTLE_MULTIPLIER);
+	double turn = ft_turn.findThrottle(controller_turn * Configs::THROTTLE_MULTIPLIER);
+
+	assert(throttle >= -1 && throttle <= 1);
+	assert(turn >= -1 && turn <= 1);
 
 	if(throttle != 0 && turn != 0)
 	{
@@ -101,62 +156,4 @@ void TeleopDriveTrainController::setTurn(double throttle, double turn)
 		p_drive_base->setSide(LEFT, l_side);
 		p_drive_base->setSide(RIGHT, r_side);
 	}
-}
-
-double TeleopDriveTrainController::findThrottle(double throttle)
-{
-	//stores last throttle!
-	static float prev_throttle = 0.0f;
-
-	//clock returns clock ticks since epoch
-	static float prev_time = clock() / (double)CLOCKS_PER_SEC;
-	float current_time = clock() / (double)CLOCKS_PER_SEC;
-
-	if(Configs::ACCEL_TIME != 0)
-	{
-		double accel = (throttle - prev_throttle) / Configs::ACCEL_TIME;
-		float delta_time = current_time - prev_time;
-
-		double delta_throttle = delta_time * accel;
-
-		throttle = prev_throttle + delta_throttle;
-	}
-
-	//sets prev time to current one
-	prev_time = current_time;
-
-	//sets prev throttle to current one
-	prev_throttle = throttle;
-
-	return (abs(throttle) < Configs::ZERO_THROTTLE_THRESHOLD) ? 0.0 : throttle;
-}
-
-double TeleopDriveTrainController::findTurn(double throttle)
-{
-	//I <3 WET Programming!
-
-	//stores last throttle!
-		static float prev_throttle = 0.0f;
-
-		//clock returns clock ticks since epoch
-		static float prev_time = clock() / (double)CLOCKS_PER_SEC;
-		float current_time = clock() / (double)CLOCKS_PER_SEC;
-
-		if(Configs::ACCEL_TIME != 0)
-		{
-			double accel = (throttle - prev_throttle) / Configs::ACCEL_TIME;
-			float delta_time = current_time - prev_time;
-
-			double delta_throttle = delta_time * accel;
-
-			throttle = prev_throttle + delta_throttle;
-		}
-
-		//sets prev time to current one
-		prev_time = current_time;
-
-		//sets prev throttle to current one
-		prev_throttle = throttle;
-
-		return (abs(throttle) < Configs::ZERO_THROTTLE_THRESHOLD) ? 0.0 : throttle;
 }
