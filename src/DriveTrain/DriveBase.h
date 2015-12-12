@@ -23,9 +23,32 @@ enum Side
 	NONE
 };
 
+class MotorWrapper
+{
+public:
+	Side _side;
+	std::unique_ptr<Motor> _motor;
+
+	operator std::unique_ptr<Motor>&()
+		{
+		return _motor;
+		};
+
+	Motor* get()
+	{
+		return _motor.get();
+	}
+
+	Motor* operator->()
+		{
+		return _motor.get();
+		}
+
+};
+
 class DriveBase {
 private:
-	std::map<int, std::unique_ptr<Motor> > all_motors;
+	std::map<int, MotorWrapper> all_motors;
 
 	DriveBase& addMotor()
 	{
@@ -42,7 +65,7 @@ private:
 	DriveBase& addMotor(int port, Side wt, T... types)
 	{
 		std::cout << "Added motor" << wt << "@ port" << port << std::endl;
-		all_motors.emplace(wt, std::make_unique<Motor>(port) );
+		all_motors.emplace(port, MotorWrapper{wt, std::make_unique<Motor>(port)});
 		addMotor(types...);
 
 		return *this;

@@ -12,14 +12,11 @@ namespace Configs
 {
 	extern const double ACCEL_TIME;
 	extern const double ZERO_THROTTLE_THRESHOLD;
+	extern const double THROTTLE_CUTOFF;
 	extern const double THROTTLE_MULTIPLIER;
 	extern const double MAX_TURN_RADIUS;
 	extern const double ROBOT_WIDTH;
 	extern const double DRIVE_CONTROLLER_PORT;
-	extern const double ELEVATOR_CONTROLLER_PORT;
-	extern const double ELEVATOR_MULTIPLIER;
-	extern const int FORK_TOGGLE_BIND;
-	extern const int SWITCH_SENSITIVITY;
 	extern const int PANIC_BIND;
 };
 

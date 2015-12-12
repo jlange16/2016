@@ -26,6 +26,7 @@ class Motor {
 private:
 	std::unique_ptr<TalonSRX> talon;
 	static std::vector<int> all_ports;
+	char _channel;
 public:
 	Motor(int channel);
 	~Motor();

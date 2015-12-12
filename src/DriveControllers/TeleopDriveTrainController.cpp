@@ -21,8 +21,8 @@ namespace
 	class FindThrottle
 	{
 	private:
-		float _prev_throttle = clock() / (double)CLOCKS_PER_SEC;
-		float _prev_time;
+		float _prev_throttle = 0;
+		float _prev_time = clock() / (double)CLOCKS_PER_SEC;
 	public:
 		double findThrottle(double throttle)
 		{
@@ -35,6 +35,9 @@ namespace
 			{
 				double accel = (throttle - _prev_throttle) / Configs::ACCEL_TIME;
 				float delta_time = current_time - _prev_time;
+				//converts to milliseconds
+				constexpr float MILLISEC_IN_SEC = 1000;
+				delta_time *= MILLISEC_IN_SEC;
 
 				double delta_throttle = delta_time * accel;
 
@@ -47,7 +50,7 @@ namespace
 			//sets prev throttle to current one
 			_prev_throttle = throttle;
 
-			return (abs(throttle) < Configs::ZERO_THROTTLE_THRESHOLD) ? 0.0 : throttle;
+			return (fabs(throttle) <= Configs::THROTTLE_CUTOFF) ? 0.0 : throttle;
 		}
 	};
 }
@@ -62,22 +65,23 @@ TeleopDriveTrainController::~TeleopDriveTrainController() = default;
 void TeleopDriveTrainController::update()
 {
 	double controller_turn = p_user_controller->getLeftXAxis();
-	double controller_throttle = p_user_controller->getRightYAxis();
+	double controller_throttle = -p_user_controller->getRightYAxis();
+	//                           ^: For some reason, the Y axis is inverted
 
 
 	//moved it out of joystick into here
-	if(controller_turn <= Configs::ZERO_THROTTLE_THRESHOLD)
+	if(abs(controller_turn) <= Configs::ZERO_THROTTLE_THRESHOLD)
 	{
 		controller_turn = 0;
 	}
 
-	if(controller_throttle <= Configs::ZERO_THROTTLE_THRESHOLD)
+	if(abs(controller_throttle) <= Configs::ZERO_THROTTLE_THRESHOLD)
 	{
 		controller_throttle = 0;
 	}
 
-	std::cout << controller_turn << std::endl;
-	std::cout << controller_throttle << std::endl;
+	std::cout << "CONTROLLER TURN: " << controller_turn << std::endl;
+	std::cout << "CONTROLLER THROT: " << controller_throttle << std::endl;
 
 	static FindThrottle ft_turn{};
 	static FindThrottle ft_throt{};
@@ -85,6 +89,9 @@ void TeleopDriveTrainController::update()
 	//is l side?
 	double throttle = ft_throt.findThrottle(controller_throttle * Configs::THROTTLE_MULTIPLIER);
 	double turn = ft_turn.findThrottle(controller_turn * Configs::THROTTLE_MULTIPLIER);
+
+	std::cout << "CALC THROT: " << throttle << std::endl;
+	std::cout << "CALC TURN: " << turn << std::endl;
 
 	assert(throttle >= -1 && throttle <= 1);
 	assert(turn >= -1 && turn <= 1);
@@ -152,6 +159,9 @@ void TeleopDriveTrainController::setTurn(double throttle, double turn)
 		double r_side = calcInsideWheelSpeed(throttle, turn);
 
 		//TODO: IMPLEMENT REVERSE TURNING
+
+		assert(l_side >= -1 && l_side <= 1);
+		assert(r_side >= -1 && r_side <= 1);
 
 		p_drive_base->setSide(LEFT, l_side);
 		p_drive_base->setSide(RIGHT, r_side);

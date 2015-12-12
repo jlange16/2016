@@ -28,7 +28,7 @@ void DriveBase::setSide(Side side, double speed)
 {
 	for(auto& it : all_motors)
 	{
-		if(it.first == side)
+		if(it.second._side == side)
 		{
 			it.second->setSpeed(speed);
 		}
