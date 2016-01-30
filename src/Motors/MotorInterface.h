@@ -11,7 +11,7 @@
 class MotorInterface
 {
 public:
-	virtual ~MotorInterface() = 0;
+	virtual ~MotorInterface() = default;
 	virtual void setSpeed(double speed) = 0;
 	virtual void kill() = 0;
 };

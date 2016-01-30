@@ -11,7 +11,7 @@
 
 #include <cassert>
 
-Motor::Motor(unsigned int channel)
+Motor::Motor(unsigned int channel) : MotorInterface()
 {
 	_motor = std::make_unique<TalonSRX>(channel);
 }
@@ -23,6 +23,7 @@ Motor::~Motor()
 
 void Motor::setSpeed(double speed)
 {
+	//for debugging
 	assert(-1 <= speed && speed <= 1);
 	_motor->Set(speed);
 }
