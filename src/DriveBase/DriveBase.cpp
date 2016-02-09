@@ -7,6 +7,8 @@
 
 #include <DriveBase/DriveBase.h>
 
+#include "Motors/Motor.h"
+
 void DriveBase::setSide(double speed, Side side)
 {
 	for(auto& it : _motors)
@@ -26,7 +28,7 @@ void DriveBase::setAll(double speed)
 	}
 }
 
-void DriveBase::setIndividual(double speed, MotorInterface* mw)
+void DriveBase::setIndividual(double speed, unsigned int mw)
 {
-	mw->setSpeed(speed);
+
 }

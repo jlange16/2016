@@ -8,21 +8,22 @@
 #ifndef SRC_MOTORS_MOTOR_H_
 #define SRC_MOTORS_MOTOR_H_
 
-#include "MotorInterface.h"
-
 #include <memory>
 
 class TalonSRX;
 
-class Motor : public MotorInterface
+class Motor
 {
 private:
 	std::unique_ptr<TalonSRX> _motor;
+	unsigned int _channel;
 public:
 	Motor(unsigned int channel);
 	~Motor();
-	void setSpeed(double speed) override;
-	void kill() override;
+	void setSpeed(double speed);
+	void kill();
+	unsigned int getChannel() const;
+
 };
 
 #endif /* SRC_MOTORS_MOTOR_H_ */
