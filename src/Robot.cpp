@@ -2,6 +2,8 @@
 
 #include "DriveBase/DriveBase.h"
 #include "Motors/Motor.h"
+#include "DriveControllers/TeleopDrivetrainController.h"
+#include "Controllers/Gamepad.h"
 
 #include <memory>
 
@@ -9,7 +11,10 @@ class Robot: public IterativeRobot
 {
 private:
 	//Probably have a Union of Teleop and Auto DC later
-	DriveBase db = {
+	std::unique_ptr<TeleopDrivetrainController> tdtc;
+
+
+	DriveBase db {
 			//dummy values
 			//set the values later
 			0, Side::Right,
@@ -19,6 +24,9 @@ private:
 			4, Side::Left,
 			5, Side::Left
 	};
+
+	//number is the usb port of the controller according to the driver station
+	Gamepad gp{0};
 
 	void RobotInit()
 	{
@@ -60,7 +68,7 @@ private:
 
 	void TeleopInit()
 	{
-
+		tdtc = std::make_unique<TeleopDrivetrainController>(&db, &gp);
 	}
 
 	void TeleopPeriodic()
