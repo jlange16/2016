@@ -1,8 +1,24 @@
 #include "WPILib.h"
 
+#include "DriveBase/DriveBase.h"
+#include "Motors/Motor.h"
+
+#include <memory>
+
 class Robot: public IterativeRobot
 {
 private:
+	//Probably have a Union of Teleop and Auto DC later
+	DriveBase db = {
+			//dummy values
+			//set the values later
+			0, Side::Right,
+			1, Side::Right,
+			2, Side::Right,
+			3, Side::Left,
+			4, Side::Left,
+			5, Side::Left
+	};
 
 	void RobotInit()
 	{
