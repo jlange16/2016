@@ -73,7 +73,7 @@ private:
 
 	void TeleopPeriodic()
 	{
-
+		tdtc->update();
 	}
 
 	void TestPeriodic()
