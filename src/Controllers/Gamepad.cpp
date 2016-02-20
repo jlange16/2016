@@ -5,8 +5,7 @@
  *      Author: norayu
  */
 
-#include <Controls/Gamepad.h>
-
+#include <Controllers/Gamepad.h>
 #include <Joystick.h>
 
 #include <cassert>

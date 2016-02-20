@@ -5,8 +5,8 @@
  *      Author: norayu
  */
 
-#ifndef SRC_CONTROLS_GAMEPAD_H_
-#define SRC_CONTROLS_GAMEPAD_H_
+#ifndef SRC_CONTROLLERS_GAMEPAD_H_
+#define SRC_CONTROLLERS_GAMEPAD_H_
 
 #include <memory>
 /*
@@ -31,4 +31,4 @@ public:
 	double getRawAxis(unsigned int channel);
 };
 
-#endif /* SRC_CONTROLS_GAMEPAD_H_ */
+#endif /* SRC_CONTROLLERS_GAMEPAD_H_ */
