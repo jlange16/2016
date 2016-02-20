@@ -15,14 +15,13 @@ private:
 
 
 	DriveBase db {
-			//dummy values
 			//set the values later
 			0, Side::Right,
-			1, Side::Right,
-			2, Side::Right,
-			3, Side::Left,
+			3, Side::Right,
+			5, Side::Right,
 			4, Side::Left,
-			5, Side::Left
+			2, Side::Left,
+			7, Side::Left
 	};
 
 	//number is the usb port of the controller according to the driver station

@@ -10,6 +10,7 @@
 #include <TalonSRX.h>
 
 #include <cassert>
+#include <iostream>
 
 Motor::Motor(unsigned int channel) : _channel(channel)
 {
@@ -25,6 +26,7 @@ void Motor::setSpeed(double speed)
 {
 	//for debugging
 	assert(-1 <= speed && speed <= 1);
+	std::cout << _channel << ": " << speed << std::endl;
 	_motor->Set(speed);
 }
 
