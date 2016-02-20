@@ -15,7 +15,14 @@ void DriveBase::setSide(double speed, Side side)
 	{
 		if(it.second == side)
 		{
-			it.first->setSpeed(speed);
+			if(it.second == Side::Right)
+			{
+				it.first->setSpeed(-speed);
+			}
+			else
+			{
+				it.first->setSpeed(speed);
+			}
 		}
 	}
 }

@@ -54,7 +54,9 @@ void TeleopDrivetrainController::update() {
 
 	//We use Left Y for throttle
 	//And Right X for turning
-	double ly = _gp->getLeftY();
+
+	//Left Y is inverted.
+	double ly = -_gp->getLeftY();
 	double rx = _gp->getRightX();
 
 	setTurn(ly, rx);
