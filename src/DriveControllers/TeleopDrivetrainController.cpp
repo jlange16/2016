@@ -56,8 +56,8 @@ void TeleopDrivetrainController::update() {
 	//And Right X for turning
 
 	//Left Y is inverted.
-	double ly = -_gp->getLeftY();
-	double rx = _gp->getRightX();
+	double ly = _gp->getLeftY();
+	double rx = -_gp->getRightX();
 
 	setTurn(ly, rx);
 }
