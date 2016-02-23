@@ -9,6 +9,7 @@
 
 #include "DriveBase/DriveBase.h"
 #include "Controllers/Gamepad.h"
+#include "Configs/Configs.h"
 
 #include <cassert>
 
@@ -26,6 +27,9 @@ TeleopDrivetrainController::TeleopDrivetrainController(DriveBase* db,
 void TeleopDrivetrainController::setTurn(double throttle, double turn)
 {
 	//Super sensitive
+
+	//scale throttle
+	throttle *= CONFIGS::MOTOR_SCALE;
 
 	double l_side;
 	double r_side;
@@ -55,7 +59,7 @@ void TeleopDrivetrainController::update() {
 	//We use Left Y for throttle
 	//And Right X for turning
 
-	//Left Y is inverted.
+	//Right X is inverted?
 	double ly = _gp->getLeftY();
 	double rx = -_gp->getRightX();
 

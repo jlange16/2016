@@ -10,6 +10,12 @@ namespace CONFIGS {
 
 	//robot width in m
 	constexpr double ROBOT_WIDTH = .86;
+
+	//binds for intake
+	constexpr unsigned int RT_BIND = 3;
+	constexpr unsigned int RB_BIND = 6;
+	//compensation for right trigger dead spot
+	constexpr float RT_COMP = 0;
 }
 
 #endif /* SRC_CONFIGS_CONFIGS_H_ */
