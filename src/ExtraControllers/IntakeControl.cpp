@@ -27,16 +27,16 @@ void IntakeControl::toggle()
 	//right now dummy
 	//spins until limit switch is hit
 	//defaults .5
-	constexpr double DEF_SPEED = .5;
+	constexpr double DEF_SPEED = .5; //default speed of intake motor
 
-	if(_lw->pressed() == true)
+	if(_lw->pressed() == true)  //if limit switch is pressed, stop the motor; otherwise keep turning at .5 speed
 	{
 		should_turn = false;
 	}
 
 	if(should_turn)
 	{
-		force(DEF_SPEED);
+		force(DEF_SPEED); //uses the force function below to set default speed
 	}
 	else
 	{
@@ -46,25 +46,25 @@ void IntakeControl::toggle()
 
 }
 
-void IntakeControl::force(double speed)
+void IntakeControl::force(double speed) //sets the speed of intake motor to whatever speed you input as a parameter
 {
 	_in->setSpeed(speed);
 }
 
 void IntakeControl::update()
 {
-	auto rt = _gp->getRawAxis(CONFIGS::RT_BIND);
-	auto rb = _gp->getRawButton(CONFIGS::RB_BIND);
+	auto rt = _gp->getRawAxis(CONFIGS::RT_BIND); //force button
+	auto rb = _gp->getRawButton(CONFIGS::RB_BIND); //toggle button 
 
 	//force gets priority of both force and toggle pressed
 	//force speed depends on how much button is pressed
 	if(rt > CONFIGS::RT_COMP)
 	{
-		force(rt * CONFIGS::MOTOR_SCALE);
+		force(rt * CONFIGS::MOTOR_SCALE); //turns motor at a speed proportional to how much rt is pressed
 		return;
 	}
 
-	if(rb != false)
+	if(rb != false) //checks the toggle button, and toggles the motor if pressed
 	{
 		toggle();
 		return;
@@ -72,6 +72,6 @@ void IntakeControl::update()
 
 	//set the motor speed to 0
 	constexpr unsigned char DEAD = 0; //stupid magic numbers
-	force(DEAD);
+	force(DEAD); //if neither is pressed, stop the motor
 }
 
