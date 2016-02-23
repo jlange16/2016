@@ -4,6 +4,9 @@
 #include "Motors/Motor.h"
 #include "DriveControllers/TeleopDrivetrainController.h"
 #include "Controllers/Gamepad.h"
+#include "ExtraControllers/IntakeControl.h"
+#include "DriveBase/Intake.h"
+#include "Sensors/LimitSwitch.h"
 
 #include <memory>
 
@@ -13,20 +16,22 @@ private:
 	//Probably have a Union of Teleop and Auto DC later
 	std::unique_ptr<TeleopDrivetrainController> tdtc;
 
+	std::unique_ptr<IntakeControl> ic;
+
 
 	DriveBase db {
 			//set the values later
-
-
 			0, Side::Right,
 			3, Side::Right,
 			5, Side::Right,
 			4, Side::Left,
 			2, Side::Left,
 			7, Side::Left
-
-
 	};
+
+	//dummy values
+	Intake in {1};
+	LimitSwitch ball_seek{0};
 
 	//number is the usb port of the controller according to the driver station
 	Gamepad gp{0};
@@ -72,11 +77,13 @@ private:
 	void TeleopInit()
 	{
 		tdtc = std::make_unique<TeleopDrivetrainController>(&db, &gp);
+		ic = std::make_unique<IntakeControl>(&in, &ball_seek, &gp);
 	}
 
 	void TeleopPeriodic()
 	{
 		tdtc->update();
+		ic->update();
 	}
 
 	void TestPeriodic()
